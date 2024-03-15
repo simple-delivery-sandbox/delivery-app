@@ -1,0 +1,39 @@
+version: '3.8'
+services:
+  frontend:
+    build: 
+      context: ./frontend-app
+      dockerfile: Dockerfile
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./backend-app
+      dockerfile: Dockerfile
+  
+  db:
+    image: mysql:8.3.0
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+      MYSQL_DATABASE: master
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
+    restart: always
+    ports:
+      - "3306:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+  
+  nginx:
+    image: nginx:alpine
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend
+      - backend
+
+volumes:
+  db-data:
