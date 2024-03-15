@@ -2,14 +2,14 @@ version: '3.8'
 services:
   frontend:
     build: 
-      context: ./frontend-app
+      context: ./frontend
       dockerfile: Dockerfile
     depends_on:
       - backend
 
   backend:
     build:
-      context: ./backend-app
+      context: ./backend
       dockerfile: Dockerfile
   
   db:
