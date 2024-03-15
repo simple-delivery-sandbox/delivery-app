@@ -1,13 +1,21 @@
-FROM golang:1.22.0 AS builder
-WORKDIR /app
-COPY go.mod go.sum ./
-RUN go mod download
-COPY . .
-RUN CGO_ENABLED=0 GOOS=linux go build -o main ./cmd/main.go
+# ベースイメージ
+FROM golang:1.22.1-alpine3.19
 
-FROM alpine:latest
-RUN apk --no-cache add ca-certificates
-WORKDIR /root/
-COPY --from=builder /app/main .
+# 必要なパッケージのインストール
+RUN apk --no-cache add ca-certificates && \
+    go install github.com/cosmtrek/air@latest
+
+# 作業ディレクトリの設定
+WORKDIR /app
+
+# プロジェクトのファイルをコピー
+COPY . .
+
+# Goモジュールの依存関係をダウンロード
+RUN go mod download
+
+# アプリケーションのポートを公開
 EXPOSE 8080
-CMD ["./main"]
+
+# air コマンドを実行
+CMD ["air", "-c", ".air.toml"]
