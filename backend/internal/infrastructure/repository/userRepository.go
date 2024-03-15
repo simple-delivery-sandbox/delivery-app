@@ -15,9 +15,10 @@ func NewUserRepository(handler *infrastructure.SqlHandler) *UserRepository {
 
 func (r *UserRepository) Store(user *model.User) error {
 	_, err := r.Handler.Execute(
-		"INSERT INTO users (email, password) VALUES ($1, $2)",
+		"INSERT INTO users (email, password) VALUES (?, ?)",
 		user.Email, user.Password,
 	)
+
 	return err
 }
 
@@ -38,5 +39,6 @@ func (r *UserRepository) FindByEmail(email string) (*model.User, error) {
 		}
 		return &user, nil
 	}
+
 	return nil, nil
 }
