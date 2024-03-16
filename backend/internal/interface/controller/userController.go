@@ -35,9 +35,11 @@ func (c *UserController) Login(ctx echo.Context) error {
 	if err := ctx.Bind(user); err != nil {
 		return err
 	}
-	user, err := c.userUsecase.Login(user.Email, user.Password)
+	token, err := c.userUsecase.Login(user.Email, user.Password)
 	if err != nil {
 		return ctx.JSON(http.StatusUnauthorized, err.Error())
 	}
-	return ctx.JSON(http.StatusOK, user)
+	return ctx.JSON(http.StatusOK, map[string]string{
+		"access_token": *token,
+	})
 }

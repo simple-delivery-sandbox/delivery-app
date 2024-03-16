@@ -8,6 +8,7 @@ import (
 	"github.com/simple-delivery-sandbox/delivery-app/backend/internal/infrastructure"
 	"github.com/simple-delivery-sandbox/delivery-app/backend/internal/infrastructure/repository"
 	"github.com/simple-delivery-sandbox/delivery-app/backend/internal/interface/controller"
+	"github.com/simple-delivery-sandbox/delivery-app/backend/pkg/jwt"
 )
 
 func main() {
@@ -29,5 +30,11 @@ func main() {
 	e.POST("/signup", userController.SignUp)
 	e.POST("/login", userController.Login)
 
+	e.GET("/user/info", userInfoHandler, jwt.JwtWithRoleMiddleware([]string{"user"}))
+
 	e.Logger.Fatal(e.Start(":8080"))
+}
+
+func userInfoHandler(c echo.Context) error {
+	return c.String(200, "Hello, World!")
 }

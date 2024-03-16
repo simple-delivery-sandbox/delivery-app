@@ -14,6 +14,8 @@ services:
     tty: true
     volumes:
       - ./backend:/app
+    env_file:
+      - ./backend/config/.env
   
   db:
     image: mysql:8.3.0

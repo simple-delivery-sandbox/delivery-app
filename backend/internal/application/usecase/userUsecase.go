@@ -2,7 +2,10 @@ package usecase
 
 import (
 	"errors"
+	"os"
+	"time"
 
+	"github.com/golang-jwt/jwt"
 	"github.com/simple-delivery-sandbox/delivery-app/backend/internal/domain/model"
 	"github.com/simple-delivery-sandbox/delivery-app/backend/internal/domain/service"
 	"golang.org/x/crypto/bcrypt"
@@ -27,7 +30,7 @@ func (uc *UserUsecase) SignUp(user *model.User) error {
 	return uc.userService.SignUp(user)
 }
 
-func (uc *UserUsecase) Login(email, password string) (*model.User, error) {
+func (uc *UserUsecase) Login(email, password string) (*string, error) {
 	user, err := uc.userService.Login(email, password)
 	if err != nil {
 		return nil, err
@@ -41,5 +44,17 @@ func (uc *UserUsecase) Login(email, password string) (*model.User, error) {
 		return nil, errors.New("invalid password")
 	}
 
-	return user, nil
+	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"iss":   "delivery-app",
+		"sub":   int64(user.ID),
+		"aud":   os.Getenv("JWT_AUDIENCE"),
+		"exp":   time.Now().Add(time.Hour * 24).Unix(),
+		"iat":   time.Now().Unix(),
+		"roles": []string{user.Role},
+	})
+	token, err := claims.SignedString([]byte(os.Getenv("JWT_SECRET_KEY")))
+	if err != nil {
+		return nil, err
+	}
+	return &token, nil
 }

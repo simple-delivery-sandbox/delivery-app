@@ -15,8 +15,8 @@ func NewUserRepository(handler *infrastructure.SqlHandler) *UserRepository {
 
 func (r *UserRepository) Store(user *model.User) error {
 	_, err := r.Handler.Execute(
-		"INSERT INTO users (email, password) VALUES (?, ?)",
-		user.Email, user.Password,
+		"INSERT INTO users (email, password, role) VALUES (?, ?, ?)",
+		user.Email, user.Password, string("user"),
 	)
 
 	return err
@@ -24,7 +24,7 @@ func (r *UserRepository) Store(user *model.User) error {
 
 func (r *UserRepository) FindByEmail(email string) (*model.User, error) {
 	row, err := r.Handler.Query(
-		"SELECT id, email, password FROM users WHERE email = $1",
+		"SELECT id, email, password, role FROM users WHERE email = ?",
 		email,
 	)
 	if err != nil {
@@ -34,7 +34,7 @@ func (r *UserRepository) FindByEmail(email string) (*model.User, error) {
 
 	if row.Next() {
 		user := model.User{}
-		if err := row.Scan(&user.ID, &user.Email, &user.Password); err != nil {
+		if err := row.Scan(&user.ID, &user.Email, &user.Password, &user.Role); err != nil {
 			return nil, err
 		}
 		return &user, nil
