@@ -58,3 +58,7 @@ func (uc *UserUsecase) Login(email, password string) (*string, error) {
 	}
 	return &token, nil
 }
+
+func (uc *UserUsecase) UserInfo(id int) (*model.User, error) {
+	return uc.userService.UserInfo(id)
+}

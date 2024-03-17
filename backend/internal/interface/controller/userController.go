@@ -43,3 +43,21 @@ func (c *UserController) Login(ctx echo.Context) error {
 		"access_token": *token,
 	})
 }
+
+func (c *UserController) UserInfo(ctx echo.Context) error {
+	userIDValue := ctx.Get("user")
+	userID, ok := userIDValue.(float64)
+	if !ok {
+		return ctx.JSON(http.StatusUnauthorized, "Unauthorized")
+	}
+	user, err := c.userUsecase.UserInfo(int(userID))
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err.Error())
+	}
+	response := map[string]interface{}{
+		"id":    user.ID,
+		"email": user.Email,
+		"role":  user.Role,
+	}
+	return ctx.JSON(http.StatusOK, response)
+}

@@ -1,12 +1,13 @@
 import { useNavigate } from 'react-router-dom';
-import { fakeAuthProvider } from '../utils/auth';
+
+import { authProvider } from "../utils/auth";
 
 export default function Home() {
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        fakeAuthProvider.signout(() => navigate("/"))
-
+        authProvider.signout();
+        navigate("/login");
     }
 
     return (

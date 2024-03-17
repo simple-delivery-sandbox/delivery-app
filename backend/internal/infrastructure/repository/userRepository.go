@@ -42,3 +42,24 @@ func (r *UserRepository) FindByEmail(email string) (*model.User, error) {
 
 	return nil, nil
 }
+
+func (r *UserRepository) FindByID(id int) (*model.User, error) {
+	row, err := r.Handler.Query(
+		"SELECT id, email, role FROM users WHERE id = ?",
+		id,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer row.Close()
+
+	if row.Next() {
+		user := model.User{}
+		if err := row.Scan(&user.ID, &user.Email, &user.Role); err != nil {
+			return nil, err
+		}
+		return &user, nil
+	}
+
+	return nil, nil
+}

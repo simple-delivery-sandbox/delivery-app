@@ -1,10 +1,10 @@
 import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { fakeAuthProvider } from "../utils/auth";
 import Home from "../pages/Home";
 import Login from "../pages/Login"
 import { Layout } from "./Layout";
 import Register from "../pages/Register";
+import RequireAuth from "./RequireAuth";
 
 export const RouterConfig: React.VFC = () => {
     return (
@@ -15,9 +15,13 @@ export const RouterConfig: React.VFC = () => {
                         <Route path="/" element={<Navigate replace to="/home" />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/signup" element={<Register />} />
-                        <Route path="/home" element={
-                            fakeAuthProvider.isAuthenticated ? <Home /> : <Navigate replace to="/login" />
-                        } />
+                        <Route
+                            path="/home"
+                            element={
+                                <RequireAuth>
+                                    <Home />
+                                </RequireAuth>
+                            }></Route>
                     </Route>
                 </Routes>
             </BrowserRouter>

@@ -42,6 +42,11 @@ func JwtWithRoleMiddleware(roles []string) echo.MiddlewareFunc {
 				for _, roleClaims := range roleClaims {
 					for _, role := range roles {
 						if roleClaims == role {
+							userID, ok := claims["sub"]
+							if !ok {
+								return echo.NewHTTPError(http.StatusUnauthorized, "invalid user")
+							}
+							c.Set("user", userID)
 							return next(c)
 						}
 					}

@@ -6,22 +6,30 @@ import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import '../styles/login.css';
 import { Button } from "react-bootstrap";
+import { authProvider } from '../utils/auth';
 
 export default function Login() {
     const navigate = useNavigate();
-    const [validated, setValidated] = useState(false); // バリデーション状態を追加
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [validated, setValidated] = useState(false);
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
         const form = event.currentTarget;
-        if (form.checkValidity() === false) {
-            event.preventDefault();
+        if (!form.checkValidity()) {
             event.stopPropagation();
-        } else {
-            event.preventDefault();
-            navigate("/home");
+            setValidated(true);
+            return;
         }
-        setValidated(true); // バリデーション状態を更新
-    };
+
+        try {
+            await authProvider.signin(email, password);
+            navigate("/home");
+        } catch (error) {
+            console.log("Login failed. Please check your email and password.")
+        }
+    }
 
     return (
         <div className="box">
@@ -31,7 +39,13 @@ export default function Login() {
                     <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
                     <Form.Label column sm="3">Email</Form.Label>
                     <Col sm="9">
-                        <Form.Control required type="email" placeholder="sample@example.com" />
+                        <Form.Control
+                            required 
+                            type="email" 
+                            placeholder="sample@example.com"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
                         <Form.Control.Feedback type="invalid">
                             Please enter a valid email.
                         </Form.Control.Feedback>
@@ -41,7 +55,13 @@ export default function Login() {
                     <Form.Group as={Row} className="mb-3" controlId="formPlaintextPassword">
                     <Form.Label column sm="3">Password</Form.Label>
                     <Col sm="9">
-                        <Form.Control required type="password" placeholder="12345" />
+                        <Form.Control 
+                            required 
+                            type="password" 
+                            placeholder="12345"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
                         <Form.Control.Feedback type="invalid">
                             Please enter a password.
                         </Form.Control.Feedback>

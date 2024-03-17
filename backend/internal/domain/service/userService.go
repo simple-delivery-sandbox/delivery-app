@@ -22,3 +22,7 @@ func (s *UserService) SignUp(user *model.User) error {
 func (s *UserService) Login(email, password string) (*model.User, error) {
 	return s.repo.FindByEmail(email)
 }
+
+func (s *UserService) UserInfo(id int) (*model.User, error) {
+	return s.repo.FindByID(id)
+}
