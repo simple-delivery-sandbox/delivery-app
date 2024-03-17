@@ -7,6 +7,8 @@ import Container from 'react-bootstrap/Container';
 import '../styles/login.css';
 import { Button } from "react-bootstrap";
 import { authProvider } from '../utils/auth';
+import { DASHBOARD_ROLES } from '../constants/roles';
+
 
 export default function Login() {
     const navigate = useNavigate();
@@ -18,7 +20,11 @@ export default function Login() {
         const checkAuthentication = async () => {
             const isAuthenticated = await authProvider.verifyToken();
             if (isAuthenticated.isValid) {
-                navigate("/home");
+                if (DASHBOARD_ROLES.includes(isAuthenticated.role)) {
+                    navigate("/dashboard");
+                } else {
+                    navigate("/home");
+                }
             } else {
                 navigate("/login");
             }

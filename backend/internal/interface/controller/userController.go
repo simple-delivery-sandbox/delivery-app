@@ -41,6 +41,7 @@ func (c *UserController) Login(ctx echo.Context) error {
 	}
 	return ctx.JSON(http.StatusOK, map[string]string{
 		"access_token": *token,
+		"role":         user.Role,
 	})
 }
 

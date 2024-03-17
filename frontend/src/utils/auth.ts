@@ -24,8 +24,9 @@ export const authProvider = {
         if (!response.ok) {
             throw new Error('Invalid email or password')
         }
-        const { access_token } = await response.json();
+        const { access_token, role } = await response.json();
         localStorage.setItem('access_token', access_token);
+        return role;
     },
     signout() {
         localStorage.removeItem('access_token');

@@ -5,6 +5,7 @@ import Login from "../pages/Login"
 import { Layout } from "./Layout";
 import Register from "../pages/Register";
 import RequireAuth from "./RequireAuth";
+import Dashboard from "../pages/Dashboard";
 
 export const RouterConfig: React.VFC = () => {
     return (
@@ -20,6 +21,13 @@ export const RouterConfig: React.VFC = () => {
                             element={
                                 <RequireAuth requiredRoles={["user"]}>
                                     <Home />
+                                </RequireAuth>
+                            }></Route>
+                        <Route 
+                            path="/dashboard"
+                            element={
+                                <RequireAuth requiredRoles={["admin", "seller"]}>
+                                    <Dashboard />
                                 </RequireAuth>
                             }></Route>
                     </Route>

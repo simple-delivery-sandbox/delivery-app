@@ -30,7 +30,7 @@ func main() {
 	e.POST("/signup", userController.SignUp)
 	e.POST("/login", userController.Login)
 
-	e.GET("/user/info", userController.UserInfo, jwt.JwtWithRoleMiddleware([]string{"user"}))
+	e.GET("/user/info", userController.UserInfo, jwt.JwtWithRoleMiddleware([]string{"user", "admin"}))
 
 	e.Logger.Fatal(e.Start(":8080"))
 }
