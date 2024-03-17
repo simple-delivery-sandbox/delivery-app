@@ -33,7 +33,7 @@ export const authProvider = {
     async verifyToken() {
         const access_token = localStorage.getItem('access_token');
         if (!access_token) {
-            return false; // トークンが存在しない場合は直ちにfalseを返す
+            return { isValid: false }; // トークンが存在しない場合は直ちにfalseを返す
         }
 
         try {
@@ -46,15 +46,16 @@ export const authProvider = {
             });
 
             if (response.ok) {
-                return true; // トークンが有効であることを示す
+                const userInfo = await response.json();
+                return { isValid: true, role: userInfo.role }
             } else {
                 localStorage.removeItem('access_token'); // レスポンスがOKでない場合、トークンを削除
-                return false; // トークンが無効であることを示す
+                return { isValid: false }; // トークンが無効であることを示す
             }
         } catch (error) {
             console.error("Error verifying token:", error);
             localStorage.removeItem('access_token'); // エラーが発生した場合もトークンを削除
-            return false; // エラーが発生したことを示す
+            return { isValid: false }; // エラーが発生したことを示す
         }
     }
 }

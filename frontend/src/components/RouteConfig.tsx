@@ -18,7 +18,7 @@ export const RouterConfig: React.VFC = () => {
                         <Route
                             path="/home"
                             element={
-                                <RequireAuth>
+                                <RequireAuth requiredRoles={["user"]}>
                                     <Home />
                                 </RequireAuth>
                             }></Route>

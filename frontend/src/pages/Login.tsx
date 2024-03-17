@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
@@ -13,6 +13,18 @@ export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [validated, setValidated] = useState(false);
+
+    useEffect(() => {
+        const checkAuthentication = async () => {
+            const isAuthenticated = await authProvider.verifyToken();
+            if (isAuthenticated.isValid) {
+                navigate("/home");
+            } else {
+                navigate("/login");
+            }
+        }
+        checkAuthentication();
+    }, [navigate])
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();

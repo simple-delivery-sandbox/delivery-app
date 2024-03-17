@@ -1,5 +1,5 @@
 import { Container, Form, Col, Button, Row } from 'react-bootstrap';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../styles/login.css';
 import { authProvider } from '../utils/auth';
@@ -9,6 +9,18 @@ export default function Register() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [validated, setValidated] = useState(false); // バリデーション状態を追加
+
+    useEffect(() => {
+        const checkAuthentication = async () => {
+            const isAuthenticated = await authProvider.verifyToken();
+            if (isAuthenticated.isValid) {
+                navigate("/home");
+            } else {
+                navigate("/login");
+            }
+        }
+        checkAuthentication();
+    }, [navigate])
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
