@@ -25,12 +25,13 @@ func main() {
 	})
 
 	userController := controller.NewUserController(usecase.NewUserUsecase(service.NewUserService(repository.NewUserRepository(sqlHandler))))
+	productController := controller.NewProductController(usecase.NewProductUsecase(service.NewProductService(repository.NewProductRepository(sqlHandler))))
 
 	// ルーティング
 	e.POST("/signup", userController.SignUp)
 	e.POST("/login", userController.Login)
 
-	e.GET("/user/info", userController.UserInfo, jwt.JwtWithRoleMiddleware([]string{"user", "admin"}))
-
+	e.GET("/user/info", userController.UserInfo, jwt.JwtWithRoleMiddleware([]string{"user", "seller", "admin"}))
+	e.POST("/product/create", productController.Create, jwt.JwtWithRoleMiddleware([]string{"seller"}))
 	e.Logger.Fatal(e.Start(":8080"))
 }

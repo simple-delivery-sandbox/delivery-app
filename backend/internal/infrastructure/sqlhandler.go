@@ -43,3 +43,7 @@ func (handler *SqlHandler) Query(statement string, args ...interface{}) (*sql.Ro
 	}
 	return rows, nil
 }
+
+func (handler *SqlHandler) QueryRow(statement string, args ...interface{}) *sql.Row {
+	return handler.Conn.QueryRow(statement, args...)
+}

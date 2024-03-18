@@ -30,7 +30,8 @@ func (uc *UserUsecase) SignUp(user *model.User) error {
 	return uc.userService.SignUp(user)
 }
 
-func (uc *UserUsecase) Login(email, password string) (*string, error) {
+func (uc *UserUsecase) Login(email, password string) (*map[string]interface{}, error) {
+	response := make(map[string]interface{})
 	user, err := uc.userService.Login(email, password)
 	if err != nil {
 		return nil, err
@@ -56,7 +57,9 @@ func (uc *UserUsecase) Login(email, password string) (*string, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &token, nil
+	response["access_token"] = token
+	response["role"] = user.Role
+	return &response, nil
 }
 
 func (uc *UserUsecase) UserInfo(id int) (*model.User, error) {

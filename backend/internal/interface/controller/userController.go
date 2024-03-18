@@ -31,18 +31,15 @@ func (c *UserController) SignUp(ctx echo.Context) error {
 }
 
 func (c *UserController) Login(ctx echo.Context) error {
-	user := new(model.User)
-	if err := ctx.Bind(user); err != nil {
+	u := new(model.User)
+	if err := ctx.Bind(u); err != nil {
 		return err
 	}
-	token, err := c.userUsecase.Login(user.Email, user.Password)
+	response, err := c.userUsecase.Login(u.Email, u.Password)
 	if err != nil {
 		return ctx.JSON(http.StatusUnauthorized, err.Error())
 	}
-	return ctx.JSON(http.StatusOK, map[string]string{
-		"access_token": *token,
-		"role":         user.Role,
-	})
+	return ctx.JSON(http.StatusOK, response)
 }
 
 func (c *UserController) UserInfo(ctx echo.Context) error {
