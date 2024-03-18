@@ -32,6 +32,11 @@ func main() {
 	e.POST("/login", userController.Login)
 
 	e.GET("/user/info", userController.UserInfo, jwt.JwtWithRoleMiddleware([]string{"user", "seller", "admin"}))
-	e.POST("/product/create", productController.Create, jwt.JwtWithRoleMiddleware([]string{"seller"}))
+
+	product := e.Group("/product", jwt.JwtWithRoleMiddleware([]string{"seller", "admin"}))
+	product.GET("/all", productController.GetAll)
+	product.GET("/:id", productController.GetByID)
+	product.POST("/create", productController.Create)
+	product.DELETE("/:id", productController.DeleteByID)
 	e.Logger.Fatal(e.Start(":8080"))
 }

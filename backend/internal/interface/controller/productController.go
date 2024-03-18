@@ -2,6 +2,7 @@ package controller
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 	"github.com/simple-delivery-sandbox/delivery-app/backend/internal/application/usecase"
@@ -16,6 +17,27 @@ func NewProductController(productUsecase *usecase.ProductUsecase) *ProductContro
 	return &ProductController{
 		productUsecase: productUsecase,
 	}
+}
+
+func (c *ProductController) GetAll(ctx echo.Context) error {
+	products, err := c.productUsecase.GetAll()
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err.Error())
+	}
+	return ctx.JSON(http.StatusOK, products)
+}
+
+func (c *ProductController) GetByID(ctx echo.Context) error {
+	idStr := ctx.Param("id")
+	id, err := strconv.ParseInt(idStr, 10, 6)
+	if err != nil {
+		return ctx.JSON(http.StatusBadRequest, "invalid id")
+	}
+	product, err := c.productUsecase.GetByID(id)
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err.Error())
+	}
+	return ctx.JSON(http.StatusOK, product)
 }
 
 func (c *ProductController) Create(ctx echo.Context) error {
@@ -36,4 +58,17 @@ func (c *ProductController) Create(ctx echo.Context) error {
 		return ctx.JSON(http.StatusInternalServerError, err.Error())
 	}
 	return ctx.JSON(http.StatusCreated, product)
+}
+
+func (c *ProductController) DeleteByID(ctx echo.Context) error {
+	idStr := ctx.Param("id")
+	id, err := strconv.ParseInt(idStr, 10, 6)
+	if err != nil {
+		return ctx.JSON(http.StatusBadRequest, "invalid id")
+	}
+	err = c.productUsecase.DeleteByID(id)
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err.Error())
+	}
+	return ctx.JSON(http.StatusOK, "product deleted successfully")
 }

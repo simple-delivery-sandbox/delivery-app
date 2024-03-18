@@ -46,9 +46,16 @@ func (r *ProductRepository) FindAll() ([]*model.Product, error) {
 
 	for rows.Next() {
 		var p model.Product
-		err := rows.Scan(&p.ID, &p.Title, &p.Description, &p.Price, &p.SellerID)
+		var category sql.NullString
+		err := rows.Scan(&p.ID, &p.Title, &p.Description, &p.Price, &p.SellerID, &category, &p.CreatedAt)
 		if err != nil {
 			return nil, err
+		}
+
+		if category.Valid {
+			p.Category = category.String
+		} else {
+			p.Category = ""
 		}
 		products = append(products, &p)
 	}
@@ -63,15 +70,22 @@ func (r *ProductRepository) FindByID(id int64) (*model.Product, error) {
 	)
 
 	product := model.Product{}
+	var category sql.NullString
 
 	err := row.Scan(
-		&product.ID, &product.Title, &product.Description, &product.Price, &product.SellerID,
+		&product.ID, &product.Title, &product.Description, &product.Price, &product.SellerID, &category, &product.CreatedAt,
 	)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, nil
 		}
 		return nil, err
+	}
+
+	if category.Valid {
+		product.Category = category.String
+	} else {
+		product.Category = ""
 	}
 
 	return &product, nil
