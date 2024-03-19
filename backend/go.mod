@@ -2,9 +2,10 @@ module github.com/simple-delivery-sandbox/delivery-app/backend
 
 go 1.22.0
 
+require github.com/golang-jwt/jwt v3.2.2+incompatible
+
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
-	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	golang.org/x/time v0.5.0 // indirect
 )
 
