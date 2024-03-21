@@ -16,7 +16,7 @@ export default function Register() {
             if (isAuthenticated.isValid) {
                 navigate("/home");
             } else {
-                navigate("/login");
+                navigate("/signup");
             }
         }
         checkAuthentication();

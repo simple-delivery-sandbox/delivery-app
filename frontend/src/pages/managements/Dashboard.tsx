@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom"
-import { authProvider } from "../utils/auth";
+import { authProvider } from "../../utils/auth";
 
 export default function Dashboard() {
     const navigate = useNavigate();

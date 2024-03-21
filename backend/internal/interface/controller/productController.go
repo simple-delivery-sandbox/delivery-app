@@ -47,13 +47,25 @@ func (c *ProductController) Create(ctx echo.Context) error {
 		return ctx.JSON(http.StatusUnauthorized, "Unauthorized")
 	}
 
-	p := new(model.Product)
-	if err := ctx.Bind(p); err != nil {
-		return err
+	price, err := strconv.ParseFloat(ctx.FormValue("price"), 64)
+	if err != nil {
+		return ctx.JSON(http.StatusBadRequest, "Invalid price value")
 	}
-	p.SellerID = int64(userID)
 
-	product, err := c.productUsecase.Create(*p)
+	p := &model.Product{
+		Title:       ctx.FormValue("title"),
+		Description: ctx.FormValue("description"),
+		Price:       price,
+		SellerID:    int64(userID),
+		Category:    ctx.FormValue("category"),
+	}
+
+	formFile, err := ctx.FormFile("file")
+	if err != nil {
+		return ctx.JSON(http.StatusBadRequest, "image is required")
+	}
+
+	product, err := c.productUsecase.Create(*p, formFile)
 	if err != nil {
 		return ctx.JSON(http.StatusInternalServerError, err.Error())
 	}

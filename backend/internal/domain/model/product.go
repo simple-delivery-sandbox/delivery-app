@@ -18,5 +18,6 @@ type Product struct {
 	Price       float64 `json:"price"`
 	SellerID    int64   `json:"seller_id"`
 	Category    string  `json:"category"`
+	ImageURL    string  `json:"image_url"`
 	CreatedAt   string  `json:"created_at"`
 }

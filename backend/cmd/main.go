@@ -17,6 +17,11 @@ func main() {
 	e.Use(middleware.Recover())
 	e.Use(middleware.Logger())
 
+	// if os.Getenv("ENV") == "development" {
+	// 	e.Static("/static", "static")
+	// }
+	e.Static("/static", "static")
+
 	// データベース接続
 	sqlHandler := infrastructure.NewSqlHandler()
 
