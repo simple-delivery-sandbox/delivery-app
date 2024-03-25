@@ -1,6 +1,6 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet } from "react-router-dom";
 
-export const Layout: React.FC = () => {
+export const MgmtLayout: React.FC = () => {
     return (
         <>
             <header>
@@ -8,7 +8,7 @@ export const Layout: React.FC = () => {
             </header>
             <Outlet />
             <footer>
-
+                
             </footer>
         </>
     )
