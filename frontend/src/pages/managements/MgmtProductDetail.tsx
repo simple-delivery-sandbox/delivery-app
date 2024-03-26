@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { Container, Form } from "react-bootstrap";
 
 export default function MgmtProductDetail() {
 
@@ -18,13 +17,24 @@ export default function MgmtProductDetail() {
     }, [])
 
     return (
-        <Container>
-            <Form>
-                <Form.Group>
-                    <Form.Label>Title</Form.Label>
-                    <Form.Control type="text" value={product.title}></Form.Control>
-                </Form.Group>
-            </Form>
-        </Container>
+        <div>
+            <h2 className="text-3xl font-bold">Product Detail</h2>
+            <div className="mt-10">
+                <form className="max-w-sm mx-auto">
+                    <label form="disabled-title" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Title</label>
+                    <input type="text" id="disabled-title" aria-label="disabled input" className="mb-5 bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" value={product.title} disabled />
+                    <label form="disabled-description" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Description</label>
+                    <input type="text" id="disabled-description" aria-label="disabled input" className="mb-5 bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" value={product.description} disabled />
+                    <label form="disabled-price" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Price</label>
+                    <input type="text" id="disabled-price" aria-label="disabled input" className="mb-5 bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" value={product.price} disabled />
+                    <div className="py-2">
+                        <p className="font-medium text-sm mb-2">Product Image</p>
+                        <img src={`${product.image_url}`} alt="product image" />
+                    </div>
+                    <label form="disabled-created_at" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product CreatedAt</label>
+                    <input type="text" id="disabled-created_at" aria-label="disabled input" className="mb-5 bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" value={product.created_at} disabled />
+                </form>
+            </div>
+        </div>
     )
 }
